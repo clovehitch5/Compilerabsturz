@@ -6,7 +6,7 @@ N = {Main, Deklaration, Integer, Gleitkommazahl, Charakterliste, Zahl, Buchstabe
 
 T = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--',
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--', '&&', '||',
 	'int', 'float', 'string', 'if', 'else', 'while', 'end'}
 
 P = {
@@ -46,7 +46,7 @@ Zuweisung ::= Bezeichner LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommaza
 
 MathematischerAusdruck ::= Operand | MathematischerAusdruck Operator MathematischerAusdruck | '(' MathematischerAusdruck ')' .
 
-Bedingung ::= Bezeichner OP1 Bezeichner | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
+Bedingung ::= Bezeichner VergleichsOperator Bezeichner | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
 
 BedingteAnweisung ::= 'if' '(' Bedingung ')' ':' Anweisung ['else' ':' Anweisung] .
 
@@ -65,6 +65,7 @@ Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
 
 TODO:
 - Programmname
+
 
 
 
