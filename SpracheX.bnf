@@ -1,0 +1,61 @@
+G = (N, Z, T, P)
+
+N = {Main, Deklaration, Integer, Gleitkommazahl, Charakterliste, Zahl, Buchstabe, Grossbuchstabe, 
+
+T = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '"', 'int', 'float', 'string', '+', '-', '*', '/', '(', ')', '<', '>'
+
+P = {
+
+Z ::= Deklarationsteil Trennlinie Ausfuehrungsteil .
+Deklarationsteil ::= {Deklaration} .
+Ausfuehrungsteil ::= {STMT} .
+Zahl ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' .
+Buchstabe ::= 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' .
+Grossbuchstabe ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' .
+
+Typ ::= 'int' | 'float' | 'string' .
+Deklaration ::=  Typ Leerzeichen BezeichnerDeklaration LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste )
+	       | Typ Leerzeichen BezeichnerDeklaration .
+
+Trennlinie ::= '.' '.' '.' {'.'}.
+
+Charakterliste ::= '"'{ Buchstabe | Grossbuchstabe }'"' 
+		  | Charakterliste {'+' (Charakterliste | Integer | Gleitkommazahl)}  .
+Integer ::= Zahl { Zahl } .
+Gleitkommazahl ::= Zahl {Zahl} '.' Zahl {Zahl} .
+
+
+Leerzeichen ::= ' ' | ' ' Leerzeichen .
+LeerzeichenO ::= { Leerzeichen } .
+
+Bezeichner ::= ( Buchstabe | Grossbuchstabe ) {Buchstabe | Grossbuchstabe | Zahl } .
+BezeichnerDeklaration ::= Bezeichner ['<'[Charakterliste]] ['>'] .
+
+
+Zuweisung ::= Bezeichner LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste | Bezeichner | MathematischerAusdruck ) .
+Operator ::= '+', '-', '*', '/' .
+VergleichsOperator ::= '<' | '>' | '==' | '!=' .
+Inkrementierung ::= '++' | '--' .
+Operand ::= Integer | Gleitkommazahl .
+MathematischerAusdruck ::= Operand | MathematischerAusdruck Operator MathematischerAusdruck | '(' MathematischerAusdruck ')' .
+
+STMT ::= Bezeichner OP2 | Zuweisung | IFST | WHST | Deklaration | STMT STMT .
+
+IFST ::= 'if' '(' Bedingung ')' ':' STMT ['else' ':' STMT] .
+Bedingung ::= Bezeichner OP1 Bezeichner | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
+
+WHST ::= 'while' '(' Bedingung ')' ':' STMT 'end' .
+
+
+
+####
+- Bei der Zuweisung einer Zahl zu einem String wird dieser implizit die Stringdarstellung der Zahl benutzt.
+- Vorangestellte Nullen bei Zahlen werden ignoriert.
+- Bei der Zuweisung von Werten zu einer Variable muss die Eingabe dem Variablentyp entsprechen.
+- Bevor der Variable ein Wert zugewiesen wird, muss diese deklariert werden.
+- Bei der Deklaration angegebene "<" und ">" geben an, ob die Variable entweder bei Definition eingelesen (<) und/oder am Ende des Scopes ausgegeben (>) wird.
+- Hinter dem "<" bei der Deklaration kann optional ein string angegeben werden, welcher vor dem Einlesen des Wertes ausgegeben wirds (Frage nach dem Wert)
+
+
+TODO:
+- Programmname
