@@ -1,48 +1,53 @@
 G = (N, Z, T, P)
 
-N = {Main, Deklaration, Integer, Gleitkommazahl, Charakterliste, Zahl, Buchstabe, Grossbuchstabe, Trennlinie, Typ, Ausfuehrungsteil, Deklarationsteil, Leerzeichen, Leerzeichen0, Bezeichner, BezeichnerDeklaration, Zuweisung, Operator, Vergleichsoperator, Inkrementierung, Operand, MathematischerAusdruck, Bedingung, Schleife, Anweisung, BedingteAnweisung}
+N = {Main, Deklaration, Integer, Gleitkommazahl, Charakterliste, Zahl, Buchstabe, Grossbuchstabe, Trennlinie, Typ, Ausfuehrungsteil, Deklarationsteil,
+	Leerzeichen, Leerzeichen0, Bezeichner, BezeichnerDeklaration, Zuweisung, Operator, Vergleichsoperator, Inkrementierung, Operand, MathematischerAusdruck,
+	Bedingung, Schleife, Anweisung, BedingteAnweisung}
 
-T = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '"', 'int', 'float', 'string', '+', '-', '*', '/', '(', ')', '<', '>'
+T = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '"', 'int', 'float', 'string', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--'}
 
 P = {
 
 Z ::= Deklarationsteil Trennlinie Ausfuehrungsteil .
 Deklarationsteil ::= {Deklaration} .
-Ausfuehrungsteil ::= {Anweisung} .
+
 Zahl ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' .
 Buchstabe ::= 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' .
 Grossbuchstabe ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' .
-
+Operator ::= '+', '-', '*', '/' .
+VergleichsOperator ::= '<' | '>' | '==' | '!=' .
+Inkrementierung ::= '++' | '--' .
 Typ ::= 'int' | 'float' | 'string' .
-Deklaration ::=  Typ Leerzeichen BezeichnerDeklaration LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste )
-	       | Typ Leerzeichen BezeichnerDeklaration .
 
 Trennlinie ::= '.' '.' '.' {'.'}.
+
+Ausfuehrungsteil ::= {Anweisung} .
 
 Charakterliste ::= '"'{ Buchstabe | Grossbuchstabe }'"' 
 		  | Charakterliste {'+' (Charakterliste | Integer | Gleitkommazahl)}  .
 Integer ::= Zahl { Zahl } .
 Gleitkommazahl ::= Zahl {Zahl} '.' Zahl {Zahl} .
-
-
 Leerzeichen ::= ' ' | ' ' Leerzeichen .
 LeerzeichenO ::= { Leerzeichen } .
+Operand ::= Integer | Gleitkommazahl .
 
 Bezeichner ::= ( Buchstabe | Grossbuchstabe ) {Buchstabe | Grossbuchstabe | Zahl } .
 BezeichnerDeklaration ::= Bezeichner ['<'[Charakterliste]] ['>'] .
 
+Anweisung ::= Bezeichner Inkrementierung | Zuweisung | BedingteAnweisung | Schleife | Deklaration | Anweisung Anweisung .
+
+Deklaration ::=  Typ Leerzeichen BezeichnerDeklaration LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste )
+	       | Typ Leerzeichen BezeichnerDeklaration .
 
 Zuweisung ::= Bezeichner LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste | Bezeichner | MathematischerAusdruck ) .
-Operator ::= '+', '-', '*', '/' .
-VergleichsOperator ::= '<' | '>' | '==' | '!=' .
-Inkrementierung ::= '++' | '--' .
-Operand ::= Integer | Gleitkommazahl .
+
 MathematischerAusdruck ::= Operand | MathematischerAusdruck Operator MathematischerAusdruck | '(' MathematischerAusdruck ')' .
 
-Anweisung ::= Bezeichner OP2 | Zuweisung | BedingteAnweisung | Schleife | Deklaration | Anweisung Anweisung .
+Bedingung ::= Bezeichner OP1 Bezeichner | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
 
 BedingteAnweisung ::= 'if' '(' Bedingung ')' ':' Anweisung ['else' ':' Anweisung] .
-Bedingung ::= Bezeichner OP1 Bezeichner | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
 
 Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
 
@@ -59,4 +64,5 @@ Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
 
 TODO:
 - Programmname
+
 
