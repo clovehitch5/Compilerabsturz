@@ -27,7 +27,7 @@ Trennlinie ::= '.' '.' '.' {'.'}.
 Ausfuehrungsteil ::= {Anweisung} .
 
 Charakterliste ::= '"'{ Buchstabe | Grossbuchstabe }'"' 
-		  | Charakterliste {'+' (Charakterliste | Integer | Gleitkommazahl)}  .
+		  | (Charakterliste | Bezeichner) {'+' (Bezeichner |Charakterliste | Integer | Gleitkommazahl)}  .
 Integer ::= Zahl { Zahl } .
 Gleitkommazahl ::= Zahl {Zahl} '.' Zahl {Zahl} .
 Leerzeichen ::= ' ' | ' ' Leerzeichen .
@@ -65,6 +65,7 @@ Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
 
 TODO:
 - Programmname
+- Stringkonkaternation
 
 
 
