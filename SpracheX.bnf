@@ -44,14 +44,14 @@ Deklaration ::=  Typ Leerzeichen BezeichnerDeklaration LeerzeichenO '=>' Leerzei
 
 Zuweisung ::= Bezeichner LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste | Bezeichner | MathematischerAusdruck ) .
 
-MathematischerAusdruck ::= Operand | MathematischerAusdruck Operator MathematischerAusdruck | '(' MathematischerAusdruck ')' .
+MathematischerAusdruck ::= Operand | Bezeichner | MathematischerAusdruck Operator MathematischerAusdruck | '(' MathematischerAusdruck ')' .
 
 Bedingung ::= (Bezeichner | Integer | Gleitkommazahl | Charakterliste) VergleichsOperator (Bezeichner | Integer | Gleitkommazahl | Charakterliste) | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
 
 BedingteAnweisung ::= 'if' '(' Bedingung ')' ':' Anweisung ['else' ':' Anweisung] .
 
 Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
-
+}
 
 
 ####
@@ -61,7 +61,7 @@ Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
 - Bevor der Variable ein Wert zugewiesen wird, muss diese deklariert werden.
 - Bei der Deklaration angegebene "<" und ">" geben an, ob die Variable entweder bei Definition eingelesen (<) und/oder am Ende des Scopes ausgegeben (>) wird.
 - Hinter dem "<" bei der Deklaration kann optional ein string angegeben werden, welcher vor dem Einlesen des Wertes ausgegeben wirds (Frage nach dem Wert)
-
+- Wird ein Bezeichner in enem Mathematischen Ausdruck verwendet, so darf dieser nicht vom Typ String sein
 
 TODO:
 - Programmname
