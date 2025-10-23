@@ -1,11 +1,12 @@
+program fakultaet:
 
-
-
-int n<"N?: "
+int n<"N?: ">
 int result> => 1
+...
 
-................................
-while(n>0):
-    result => result*n
-    n--
+begin
+    while (n > 0):
+        result => result * n
+        n--
+    end
 end
