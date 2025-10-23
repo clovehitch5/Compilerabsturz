@@ -1,56 +1,66 @@
-G = (N, Z, T, P)
+G = ( N, Z, T, P )
 
-N = {Main, Deklaration, Integer, Gleitkommazahl, Charakterliste, Zahl, Buchstabe, Grossbuchstabe, Trennlinie, Typ, Ausfuehrungsteil, Deklarationsteil,
-	Leerzeichen, Leerzeichen0, Bezeichner, BezeichnerDeklaration, Zuweisung, Operator, Vergleichsoperator, Inkrementierung, Operand, MathematischerAusdruck,
-	Bedingung, Schleife, Anweisung, BedingteAnweisung}
+N = {
+  Z, Programm, Deklarationsteil, Deklaration, Trennlinie, Ausfuehrungsteil, Anweisung, Zuweisung, Inkrementierung, BedingteAnweisung, Schleife, ForSchleife, Typ,
+  BezeichnerDeklaration, Bezeichner, StringAusdruck, StringAtom, Charakterliste, MathematischerAusdruck, Summand, Faktor, Operand, Integer, Gleitkommazahl, Bedingung,
+  VergleichsOperator, Zahl, Buchstabe, Grossbuchstabe, Leerzeichen
+}
 
-T = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+
+T = { ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--', '&&', '||',
-	'int', 'float', 'string', 'if', 'else', 'while', 'end'}
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '=>', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--', '&&', '||',
+	'int', 'float', 'string', 'if', 'else', 'while', 'begin', 'end', 'for', '...', 'program' }
 
 P = {
 
-Z ::= Deklarationsteil Trennlinie Ausfuehrungsteil .
+Z ::= Programm Deklarationsteil Trennlinie Ausfuehrungsteil .
 Deklarationsteil ::= {Deklaration} .
 
 Zahl ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' .
 Buchstabe ::= 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' .
 Grossbuchstabe ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' .
-Operator ::= '+', '-', '*', '/' .
 VergleichsOperator ::= '<' | '>' | '==' | '!=' .
 Inkrementierung ::= '++' | '--' .
 Typ ::= 'int' | 'float' | 'string' .
 
-Trennlinie ::= '.' '.' '.' {'.'}.
+Trennlinie ::= '...' {'.'}.
 
-Ausfuehrungsteil ::= {Anweisung} .
+Ausfuehrungsteil ::= 'begin' { Anweisung } 'end' .
 
-Charakterliste ::= '"'{ Buchstabe | Grossbuchstabe }'"' 
-		  | (Charakterliste | Bezeichner) {'+' (Bezeichner |Charakterliste | Integer | Gleitkommazahl)}  .
+StringAusdruck ::= StringAtom { '+' StringAtom } .
+StringAtom ::= Charakterliste | Bezeichner .
+Charakterliste ::= '"' { Buchstabe | Grossbuchstabe } '"' .
+
 Integer ::= Zahl { Zahl } .
-Gleitkommazahl ::= Zahl {Zahl} '.' Zahl {Zahl} .
-Leerzeichen ::= ' ' | ' ' Leerzeichen .
-LeerzeichenO ::= { Leerzeichen } .
+Gleitkommazahl ::= Zahl { Zahl } '.' Zahl { Zahl } .
+Leerzeichen ::= ' ' | ' ' { Leerzeichen } .
 Operand ::= Integer | Gleitkommazahl .
 
 Bezeichner ::= ( Buchstabe | Grossbuchstabe ) {Buchstabe | Grossbuchstabe | Zahl } .
 BezeichnerDeklaration ::= Bezeichner ['<'[Charakterliste]] ['>'] .
 
-Anweisung ::= Bezeichner Inkrementierung | Zuweisung | BedingteAnweisung | Schleife | Deklaration | Anweisung Anweisung .
+Anweisung ::= ( Zuweisung | BedingteAnweisung | Schleife | ForSchleife | Inkrementierung ) .
 
-Deklaration ::=  Typ Leerzeichen BezeichnerDeklaration LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste )
+Deklaration ::=  Typ Leerzeichen BezeichnerDeklaration '=>' ( Integer | Gleitkommazahl | Charakterliste )
 	       | Typ Leerzeichen BezeichnerDeklaration .
 
-Zuweisung ::= Bezeichner LeerzeichenO '=>' LeerzeichenO ( Integer | Gleitkommazahl | Charakterliste | Bezeichner | MathematischerAusdruck ) .
+Zuweisung ::= Bezeichner '=>' ( Integer | Gleitkommazahl | Charakterliste | Bezeichner | MathematischerAusdruck | StringAusdruck ) .
 
-MathematischerAusdruck ::= Operand | Bezeichner | MathematischerAusdruck Operator MathematischerAusdruck | '(' MathematischerAusdruck ')' .
+MathematischerAusdruck ::= Summand { ('+' | '-') Summand } .
+Summand ::= Faktor { ('*' | '/') Faktor } .
+Faktor ::= Operand | Bezeichner | '(' MathematischerAusdruck ')' .
 
-Bedingung ::= (Bezeichner | Integer | Gleitkommazahl | Charakterliste) VergleichsOperator (Bezeichner | Integer | Gleitkommazahl | Charakterliste) | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
+Bedingung ::= ( Bezeichner | Integer | Gleitkommazahl | Charakterliste ) VergleichsOperator ( Bezeichner | Integer | Gleitkommazahl | Charakterliste ) | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
 
-BedingteAnweisung ::= 'if' '(' Bedingung ')' ':' Anweisung ['else' ':' Anweisung] .
+BedingteAnweisung ::= 'if' '(' Bedingung ')' ':' Anweisung [ 'else' ':' Anweisung ] 'end' .
 
 Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
+
+ForSchleife ::= 'for' '(' [ Deklaration ] ';' Bedingung ';' [ Zuweisung ] ')' ':' Anweisung 'end' .
+
+Programm ::= 'program' Leerzeichen Bezeichner ':' .
+
 }
 
 
@@ -62,15 +72,4 @@ Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
 - Bei der Deklaration angegebene "<" und ">" geben an, ob die Variable entweder bei Definition eingelesen (<) und/oder am Ende des Scopes ausgegeben (>) wird.
 - Hinter dem "<" bei der Deklaration kann optional ein string angegeben werden, welcher vor dem Einlesen des Wertes ausgegeben wirds (Frage nach dem Wert)
 - Wird ein Bezeichner in enem Mathematischen Ausdruck verwendet, so darf dieser nicht vom Typ String sein
-- Die Anweisungen (Zuweisung, Deklaration, Schleifenkopf,...) werden durch Zeilenumbrüche voneinender getrennt.
-- Tabs vor Anweisungen haben keinen Einfluss auf das Programm.  
-
-
-TODO:
-- Programmname
-- Stringkonkaternation
-
-
-
-
-
+- Wenn nicht explizit definiert können beliebig viele Leerzeichen zwischen N Terminalen existieren
