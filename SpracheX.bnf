@@ -62,6 +62,9 @@ Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
 - Bei der Deklaration angegebene "<" und ">" geben an, ob die Variable entweder bei Definition eingelesen (<) und/oder am Ende des Scopes ausgegeben (>) wird.
 - Hinter dem "<" bei der Deklaration kann optional ein string angegeben werden, welcher vor dem Einlesen des Wertes ausgegeben wirds (Frage nach dem Wert)
 - Wird ein Bezeichner in enem Mathematischen Ausdruck verwendet, so darf dieser nicht vom Typ String sein
+- Die Anweisungen (Zuweisung, Deklaration, Schleifenkopf,...) werden durch Zeilenumbrüche voneinender getrennt.
+- Tabs vor Anweisungen haben keinen Einfluss auf das Programm.  
+
 
 TODO:
 - Programmname
