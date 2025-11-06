@@ -1,75 +1,85 @@
 G = ( N, Z, T, P )
 
 N = {
-  Z, Programm, Deklarationsteil, Deklaration, Trennlinie, Ausfuehrungsteil, Anweisung, Zuweisung, Inkrementierung, BedingteAnweisung, Schleife, ForSchleife, Typ,
-  BezeichnerDeklaration, Bezeichner, StringAusdruck, StringAtom, Charakterliste, MathematischerAusdruck, Summand, Faktor, Operand, Integer, Gleitkommazahl, Bedingung,
-  VergleichsOperator, Zahl, Buchstabe, Grossbuchstabe, Leerzeichen
+  Z, Programm, Deklarationsteil, Deklaration, Trennlinie, Ausfuehrungsteil,
+  AnweisungsBlock, Anweisung, Zuweisung, Inkrementierung, BedingteAnweisung,
+  Schleife, ForSchleife, Typ, BezeichnerDeklaration, Bezeichner,
+  StringAusdruck, StringAtom, Zeichenkette, MathematischerAusdruck,
+  Summand, Faktor, Operand, GanzzahlLiteral, GleitkommaLiteral,
+  BoolescherAusdruck, VergleichsOperator, Ziffer, Buchstabe, Grossbuchstabe,
+  Leerzeichen, WSO
 }
 
-
-T = { ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
-	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '=>', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--', '&&', '||',
-	'int', 'float', 'string', 'if', 'else', 'while', 'begin', 'end', 'for', '...', 'program' }
+T = {
+  ' ', 'A'...'Z', 'a'...'z', '0'...'9',
+  ',', '.', '<=', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--',
+  '&&', '||', 'int', 'float', 'string', 'if', 'else', 'while', 'begin', 'end',
+  'for', '...', 'program'
+}
 
 P = {
 
 Z ::= Programm Deklarationsteil Trennlinie Ausfuehrungsteil .
-Deklarationsteil ::= {Deklaration} .
 
-Zahl ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' .
-Buchstabe ::= 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' .
-Grossbuchstabe ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' .
-VergleichsOperator ::= '<' | '>' | '==' | '!=' .
-Inkrementierung ::= '++' | '--' .
+Programm ::= 'program' WSO Bezeichner ':' .
+
+Deklarationsteil ::= { Deklaration } .
+
+Deklaration ::= Typ WSO BezeichnerDeklaration [ WSO '<=' WSO ( GanzzahlLiteral | GleitkommaLiteral | Zeichenkette ) ] .
+
 Typ ::= 'int' | 'float' | 'string' .
 
-Trennlinie ::= '...' {'.'}.
+BezeichnerDeklaration ::= Bezeichner [ '<' [ Zeichenkette ] ] [ '>' ] .
 
-Ausfuehrungsteil ::= 'begin' { Anweisung } 'end' .
+Bezeichner ::= ( Buchstabe | Grossbuchstabe ) { Buchstabe | Grossbuchstabe | Ziffer } .
 
-StringAusdruck ::= StringAtom { '+' StringAtom } .
-StringAtom ::= Charakterliste | Bezeichner .
-Charakterliste ::= '"' { Buchstabe | Grossbuchstabe } '"' .
+Trennlinie ::= '...' { '.' } .
 
-Integer ::= Zahl { Zahl } .
-Gleitkommazahl ::= Zahl { Zahl } '.' Zahl { Zahl } .
-Leerzeichen ::= ' ' | ' ' { Leerzeichen } .
-Operand ::= Integer | Gleitkommazahl .
+Ausfuehrungsteil ::= 'begin' WSO AnweisungsBlock 'end' .
 
-Bezeichner ::= ( Buchstabe | Grossbuchstabe ) {Buchstabe | Grossbuchstabe | Zahl } .
-BezeichnerDeklaration ::= Bezeichner ['<'[Charakterliste]] ['>'] .
+AnweisungsBlock ::= { Anweisung } .
 
 Anweisung ::= ( Zuweisung | BedingteAnweisung | Schleife | ForSchleife | Inkrementierung ) .
 
-Deklaration ::=  Typ Leerzeichen BezeichnerDeklaration '=>' ( Integer | Gleitkommazahl | Charakterliste )
-	       | Typ Leerzeichen BezeichnerDeklaration .
+Zuweisung ::= Bezeichner WSO '<=' WSO ( GanzzahlLiteral | GleitkommaLiteral | Zeichenkette | Bezeichner | MathematischerAusdruck | StringAusdruck ) .
 
-Zuweisung ::= Bezeichner '=>' ( Integer | Gleitkommazahl | Charakterliste | Bezeichner | MathematischerAusdruck | StringAusdruck ) .
+Inkrementierung ::= Bezeichner ( '++' | '--' ) .
 
 MathematischerAusdruck ::= Summand { ('+' | '-') Summand } .
 Summand ::= Faktor { ('*' | '/') Faktor } .
-Faktor ::= Operand | Bezeichner | '(' MathematischerAusdruck ')' .
+Faktor ::= Operand | Bezeichner | '(' WSO MathematischerAusdruck WSO ')' .
+Operand ::= GanzzahlLiteral | GleitkommaLiteral .
 
-Bedingung ::= ( Bezeichner | Integer | Gleitkommazahl | Charakterliste ) VergleichsOperator ( Bezeichner | Integer | Gleitkommazahl | Charakterliste ) | Bedingung ( '&&' | '||') Bedingung | '(' Bedingung ')' . 
+StringAusdruck ::= StringAtom { '+' StringAtom } .
+StringAtom ::= Zeichenkette | Bezeichner .
+Zeichenkette ::= '"' { Buchstabe | Grossbuchstabe } '"' .
 
-BedingteAnweisung ::= 'if' '(' Bedingung ')' ':' Anweisung [ 'else' ':' Anweisung ] 'end' .
+BoolescherAusdruck ::= Vergleich | '(' WSO BoolescherAusdruck WSO ')' | BoolescherAusdruck ( '&&' | '||' ) BoolescherAusdruck .
+Vergleich ::= ( Bezeichner | GanzzahlLiteral | GleitkommaLiteral | Zeichenkette ) WSO VergleichsOperator WSO ( Bezeichner | GanzzahlLiteral | GleitkommaLiteral | Zeichenkette ) .
+VergleichsOperator ::= '<' | '>' | '==' | '!=' .
 
-Schleife ::= 'while' '(' Bedingung ')' ':' Anweisung 'end' .
+BedingteAnweisung ::= 'if' '(' BoolescherAusdruck ')' ':' AnweisungsBlock [ 'else' ':' AnweisungsBlock ] 'end' .
 
-ForSchleife ::= 'for' '(' [ Deklaration ] ';' Bedingung ';' [ Zuweisung ] ')' ':' Anweisung 'end' .
+Schleife ::= 'while' '(' BoolescherAusdruck ')' ':' AnweisungsBlock 'end' .
 
-Programm ::= 'program' Leerzeichen Bezeichner ':' .
+ForSchleife ::= 'for' '(' [ Deklaration ] ';' BoolescherAusdruck ';' [ Zuweisung ] ')' ':' AnweisungsBlock 'end' .
+
+GanzzahlLiteral ::= Ziffer { Ziffer } .
+GleitkommaLiteral ::= Ziffer { Ziffer } '.' Ziffer { Ziffer } .
+Ziffer ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' .
+
+Buchstabe ::= 'a'...'z' .
+Grossbuchstabe ::= 'A'...'Z' .
+
+Leerzeichen ::= ' ' { ' ' } .
+WSO ::= [ Leerzeichen ] .   -- optionales Leerzeichen
 
 }
 
+#### Semantik:
 
-####
-- Bei der Zuweisung einer Zahl zu einem String wird dieser implizit die Stringdarstellung der Zahl benutzt.
-- Vorangestellte Nullen bei Zahlen werden ignoriert.
-- Bei der Zuweisung von Werten zu einer Variable muss die Eingabe dem Variablentyp entsprechen.
-- Bevor der Variable ein Wert zugewiesen wird, muss diese deklariert werden.
-- Bei der Deklaration angegebene "<" und ">" geben an, ob die Variable entweder bei Definition eingelesen (<) und/oder am Ende des Scopes ausgegeben (>) wird.
-- Hinter dem "<" bei der Deklaration kann optional ein string angegeben werden, welcher vor dem Einlesen des Wertes ausgegeben wirds (Frage nach dem Wert)
-- Wird ein Bezeichner in enem Mathematischen Ausdruck verwendet, so darf dieser nicht vom Typ String sein
-- Wenn nicht explizit definiert können beliebig viele Leerzeichen zwischen N Terminalen existieren
+- Variablen müssen deklariert werden, bevor sie verwendet werden.
+- Typen sind strikt: keine automatische Konvertierung zwischen Zahlen und Strings.
+- `<` und `>` bei Deklarationen kennzeichnen Eingabe bzw. Ausgabe.
+- In Schleifen und if/else-Blöcken dürfen mehrere Anweisungen stehen.
+- Leerzeichen sind nur erlaubt, wo explizit durch `WSO` vorgesehen.
