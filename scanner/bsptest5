@@ -1,0 +1,17 @@
+program edgecase:
+
+int zero <= 0
+float pi <= 3.141592
+string empty <= ""
+string special <= "Test: 123, ABC!"
+.....
+
+begin
+    if (zero == 0 || pi > 0):
+        zero++
+    end
+    
+    while (zero != 100):
+        zero <= zero + 1
+    end
+end

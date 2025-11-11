@@ -1,0 +1,19 @@
+these are identifiers
+12345
+abc123
+abc 123
+123.456 123.123e+45
+"abc" "string with a \"-character"
+
+/* C- commen (* inside a C-comment *) */
+-- Kommentar
+
+(* Modula comment /* inside a Modula-comment */ *)
+(* Modula comment (* nested *) *)
+
+1234
+
+PROCEDURE
+BEGIN
+END
+CASE

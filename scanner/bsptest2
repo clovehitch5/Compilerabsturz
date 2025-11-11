@@ -1,0 +1,18 @@
+program looptest:
+
+int counter <= 0
+int max<"Enter max: ">
+string result> <= "Done!"
+...
+
+begin
+    while (counter < max):
+        counter++
+    end
+    
+    if (counter == max):
+        result <= "Success!"
+    else:
+        result <= "Failed!"
+    end
+end

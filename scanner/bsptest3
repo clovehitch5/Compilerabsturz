@@ -1,0 +1,11 @@
+program errortest:
+
+int a <= 123
+float b <= .99
+string s <= "Missing end quote
+...
+
+begin
+    a <= a ++ b
+    @invalid_char
+end
