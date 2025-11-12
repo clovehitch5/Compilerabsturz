@@ -82,6 +82,8 @@ GLOBAL {
 
 LOCAL {
  /* user-defined local variables of the generated GetToken routine */
+# define MAX_STRING_LEN 2048
+char string [MAX_STRING_LEN+1]; int len;
 }  // LOCAL
 
 DEFAULT {
@@ -97,6 +99,9 @@ EOF {
   case STD:
     /* ok */
     break;
+  case STRING:
+    Message ("Unclosed string constant", xxError, l_scan_Attribute.Position);
+    break;
   default:
     Message ("OOPS: that should not happen!!", xxFatal, l_scan_Attribute.Position);
     break;
@@ -109,11 +114,11 @@ DEFINE  /* some abbreviations */
   digit           = {0-9}       .
   letter          = {a-z}       .
   capital_letter  = {A-Z}       .
-  whitespace      = {" "\t\n\r} .
-  string_char     = - {\"\n}    .
+  whitespace      = {\ \t\n\r} .
+  string_char     = - {"\\\n\r\f} .
 
 /* define start states, note STD is defined by default, separate several states by a comma */
-/* START STRING */
+START STRING
 
 RULE
 
@@ -177,84 +182,103 @@ RULE
         }
 
 /* String constants */
-#STD# \" string_char* \" :
-        {l_scan_Attribute.string_const.Value = malloc (l_scan_TokenLength+1);
-         l_scan_GetWord (l_scan_Attribute.string_const.Value);
-         return tok_string_const;
+#STD# \" :
+        { /* start of string */
+          yyStart (STRING);
+          len = 0;
+        }
+
+#STRING# string_char* :
+        { /* we're inside the string */
+          if (len + l_scan_TokenLength+1 >= MAX_STRING_LEN) {
+            Message ("String too long", xxError, l_scan_Attribute.Position);
+            len = 0;
+          } else {
+            len += l_scan_GetWord (&string[len]);
+          }
+        }
+
+#STRING# \" :
+        { /* end of string */
+          yyStart(STD);
+          string[len] = '\0';
+          l_scan_Attribute.string_const.Value = malloc (len+1);
+          strcpy (l_scan_Attribute.string_const.Value, string);
+          return tok_string_const;
         }
 
 /* Multi-character Operators (must come before single-character ones) */
-#STD# \<= :
+#STD# "<=" :
         {return tok_assign;
         }
 
-#STD# == :
+#STD# "==" :
         {return tok_equal;
         }
 
-#STD# != :
+#STD# "!=" :
         {return tok_not_equal;
         }
 
-#STD# \+\+ :
+#STD# "++" :
         {return tok_increment;
         }
 
-#STD# \-\- :
+#STD# "--" :
         {return tok_decrement;
         }
 
-#STD# && :
+#STD# "&&" :
         {return tok_and;
         }
 
-#STD# \|\| :
+#STD# "||" :
         {return tok_or;
         }
 
 /* Single-character Operators */
-#STD# \+ :
+#STD# "+" :
         {return tok_plus;
         }
 
-#STD# \- :
+#STD# "-" :
         {return tok_minus;
         }
 
-#STD# \* :
+#STD# "*" :
         {return tok_multiply;
         }
 
-#STD# \/ :
+#STD# "/" :
         {return tok_divide;
         }
 
-#STD# \< :
+#STD# "<" :
         {return tok_less;
         }
 
-#STD# \> :
+#STD# ">" :
         {return tok_greater;
         }
 
 /* Delimiters */
-#STD# \( :
+#STD# "(" :
         {return tok_lparen;
         }
 
-#STD# \) :
+#STD# ")" :
         {return tok_rparen;
         }
 
-#STD# \: :
+#STD# ":" :
         {return tok_colon;
         }
 
-#STD# ; :
+#STD# ";" :
         {return tok_semicolon;
         }
 
-#STD# \, :
+#STD# "," :
         {return tok_comma;
         }
 
