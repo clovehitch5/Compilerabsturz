@@ -121,6 +121,137 @@ static bool FirstFollow_1(void)
     }
 }
 
+static bool FirstFollow_2(void)
+{
+    switch (CurToken)
+    {
+    case '+':
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_3(void)
+{
+    switch (CurToken)
+    {
+    case expr_scan_EofToken:
+    case ')':
+    case ']':
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_4(void)
+{
+    switch (CurToken)
+    {
+    case '(':
+    case tok_identifier:
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_5(void)
+{
+    switch (CurToken)
+    {
+    case '*':
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_6(void)
+{
+    switch (CurToken)
+    {
+    case expr_scan_EofToken:
+    case ')':
+    case '+':
+    case ']':
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_7(void)
+{
+    switch (CurToken)
+    {
+    case '(':
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_8(void)
+{
+    switch (CurToken)
+    {
+    case tok_identifier:
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_9(void)
+{
+    switch (CurToken)
+    {
+    case tok_identifier:
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_10(void)
+{
+    switch (CurToken)
+    {
+    case '.':
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_11(void)
+{
+    switch (CurToken)
+    {
+    case "->":
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_12(void)
+{
+    switch (CurToken)
+    {
+    case '[':
+        return true;
+    default:
+        return false;
+    }
+}
+static bool FirstFollow_13(void)
+{
+    switch (CurToken)
+    {
+    case expr_scan_EofToken:
+    case '*':
+    case '+':
+    case ']':
+    case ')':
+        return true;
+    default:
+        return false;
+    }
+}
+
 /* fill in the other FirstFollow-functions: FirstFollow_2() .. FirstFollow_8() */
 
 /******************************************************************************
@@ -129,7 +260,9 @@ static bool FirstFollow_1(void)
  * 2)  E1 ::= + T E1       3)  E1 ::= epsilon
  * 4)  T  ::= F T1
  * 5)  T1 ::= * F T1       6)  T1 ::= epsilon
- * 7)  F  ::= ( E )        8)  F  ::= id
+ * 7)  F  ::= ( E )        8)  F  ::= D
+ * 9)  D  ::= id D1
+ * 10) D1 ::= . id D1       11) D1 ::= -> id D1     12) D1 ::= [ E ] D1       13) D1 ::= epsilon
  ******************************************************************************/
 
 /* The function 'f_nt()' for the non-terminal 'nt' returns true, iff
