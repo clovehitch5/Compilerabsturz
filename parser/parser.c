@@ -88,15 +88,21 @@ bool match(tToken token)
 
 /*****************************************************************************
  * First-Follow-set Tests
- * 1)  E  ::= T E1         FIRST (T E1    FOLLOW (E))  = { ( id    }
- * 2)  E1 ::= + T E1       FIRST (+ T E1  FOLLOW (E1)) = { +       }
- * 3)  E1 ::= epsilon      FIRST (epsilon FOLLOW (E1)) = { eof )   }
- * 4)  T  ::= F T1         FIRST (F T1    FOLLOW (T))  = { ( id    }
- * 5)  T1 ::= * F T1       FIRST (* F T1  FOLLOW (T1)) = { *       }
- * 6)  T1 ::= epsilon      FIRST (epsilon FOLLOW (T1)) = { eof ) + }
- * 7)  F  ::= ( E )        FIRST ( ( E )  FOLLOW (F))  = { (       }
- * 8)  F  ::= id           FIRST (id      FOLLOW (F))  = { id      }
+ * 1)  E  ::= T E1                  FIRST (T E1         FOLLOW (E))  = { ( id       }
+ * 2)  E1 ::= + T E1                FIRST (+ T E1       FOLLOW (E1)) = { +          }
+ * 3)  E1 ::= epsilon               FIRST (epsilon      FOLLOW (E1)) = { eof ) ]    }
+ * 4)  T  ::= F T1                  FIRST (F T1         FOLLOW (T))  = { ( id       }
+ * 5)  T1 ::= * F T1                FIRST (* F T1       FOLLOW (T1)) = { *          }
+ * 6)  T1 ::= epsilon               FIRST (epsilon      FOLLOW (T1)) = { eof ) + ]  }
+ * 7)  F  ::= ( E )                 FIRST ( ( E )       FOLLOW (F))  = { (          }
+ * 8)  F  ::= D                     FIRST (D            FOLLOW (F))  = { id         }
+ * 9)  D  ::= id D1                 FIRST (id D1        FOLLOW (D))  = { id         }
+ * 10) D1 ::= . id D1               FIRST (. id D1      FOLLOW (D1)) = { .          }
+ * 11) D1 ::= -> id D1              FIRST (-> id D1     FOLLOW (D1)) = { ->         }
+ * 12) D1 ::= [ E ] D1              FIRST ([ E ] D1     FOLLOW (D1)) = { [          }
+ * 13) D1 ::= epsilon               FIRST (epsilon      FOLLOW (D1)) = { eof * + ] )}
  *
+ * //TODO Zählt -> als ein Zeichen oder muss eine Konstante benutzt werden?
  * The function 'FirstFollow_i ()' returns true, if and only if 'CurToken'
  * is element of the appropriate set.
  *
