@@ -252,8 +252,6 @@ static bool FirstFollow_13(void)
     }
 }
 
-/* fill in the other FirstFollow-functions: FirstFollow_2() .. FirstFollow_8() */
-
 /******************************************************************************
  * We use the following grammar for arithmetic expressions:
  * 1)  E  ::= T E1
@@ -281,6 +279,73 @@ bool f_E(void)
     return false; /* Syntax Error */
 }
 
-/* fill in the functions for the other non-terminals */
+bool f_E1(void)
+{
+    DEBUG_show("E1");
 
+    if (FirstFollow_2())
+        return match('+') && f_T() && f_E1();
+    if (FirstFollow_3())
+        return true;
+    Message("Syntax Error in <E1>", xxError, expr_scan_Attribute.Position);
+    return false; /* Syntax Error */
+}
+
+bool f_T(void)
+{
+    DEBUG_show("T");
+
+    if (FirstFollow_4())
+        return f_F() && f_T1();
+    Message("Syntax Error in <T>", xxError, expr_scan_Attribute.Position);
+    return false; /* Syntax Error */
+}
+
+bool f_T1(void)
+{
+    DEBUG_show("T1");
+
+    if (FirstFollow_5())
+        return match('*') && f_F() && f_T1();
+    if (FirstFollow_6())
+        return true;
+    Message("Syntax Error in <T1>", xxError, expr_scan_Attribute.Position);
+    return false; /* Syntax Error */
+}
+
+bool f_F(void)
+{
+    DEBUG_show("F");
+
+    if (FirstFollow_7())
+        return match('(') && f_E() && match(')');
+    if (FirstFollow_8())
+        return f_D();
+    Message("Syntax Error in <F>", xxError, expr_scan_Attribute.Position);
+    return false; /* Syntax Error */
+}
+bool f_D(void)
+{
+    DEBUG_show("D");
+
+    if (FirstFollow_9())
+        return match(tok_identifier) && f_D1();
+    Message("Syntax Error in <D>", xxError, expr_scan_Attribute.Position);
+    return false; /* Syntax Error */
+}
+bool f_D1(void)
+{
+    DEBUG_show("D1");
+
+    if (FirstFollow_10())
+        return match('.') && match(tok_identifier) && f_D1();
+    if (FirstFollow_11())
+        return match("->") && match(tok_identifier) && f_D1();
+    if (FirstFollow_12())
+        return match('[') && f_E() && match(']') && f_D1();
+    if (FirstFollow_13())
+        return true;
+    Message("Syntax Error in <D1>", xxError, expr_scan_Attribute.Position);
+    return false; /* Syntax Error */
+}
 /***********************  E  N  D  ***********************************************/
