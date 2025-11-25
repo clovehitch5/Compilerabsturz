@@ -19,60 +19,71 @@ T = {
 
 P = {
 
-Z ::= Programm Deklarationsteil Trennlinie Ausfuehrungsteil .
+Z ::= Programm Deklarationsteil Trennlinie Ausfuehrungsteil 
 
-Programm ::= 'program' WSO Bezeichner ':' .
+Programm ::= program WSO Bezeichner : 
 
-Deklarationsteil ::= { Deklaration } .
+Deklarationsteil ::= ε | Deklaration | Deklarationsteil Deklaration
 
-Deklaration ::= Typ WSO BezeichnerDeklaration [ WSO '<=' WSO ( GanzzahlLiteral | GleitkommaLiteral | Zeichenkette ) ] .
+Deklaration ::= Typ WSO BezeichnerDeklaration | Typ WSO BezeichnerDeklaration WSO <= WSO GanzzahlLiteral 
+                                              | Typ WSO BezeichnerDeklaration WSO <= WSO GleitkommaLiteral
+                                              | Typ WSO BezeichnerDeklaration WSO <= WSO Zeichenkette
 
-Typ ::= 'int' | 'float' | 'string' .
+Typ ::= int | float | string 
 
-BezeichnerDeklaration ::= Bezeichner [ '<' [ Zeichenkette ] ] [ '>' ] .
+BezeichnerDeklaration ::= Bezeichner | Bezeichner < | Bezeichner < Zeichenkette | Bezeichner > | Bezeichner <> | Bezeichner < Zeichenkette >
 
-Bezeichner ::= ( Buchstabe | Grossbuchstabe ) { Buchstabe | Grossbuchstabe | Ziffer } .
+Bezeichner ::= ( Buchstabe | Grossbuchstabe ) { Buchstabe | Grossbuchstabe | Ziffer } 
+Bezeichner ::= Buchstabe | Buchstabe Buchstabe | Buchstabe Grossbuchstabe | Buchstabe Ziffer | Buchstabe
+             | Grossbuchstabe| Grossbuchstabe Buchstabe | Grossbuchstabe Grossbuchstabe | Grossbuchstabe Ziffer
 
-Trennlinie ::= '...' { '.' } .
 
-Ausfuehrungsteil ::= 'begin' WSO AnweisungsBlock 'end' .
+Trennlinie ::= ... | Trennlinie .
 
-AnweisungsBlock ::= { Anweisung } .
+Ausfuehrungsteil ::= begin WSO AnweisungsBlock end 
 
-Anweisung ::= ( Zuweisung | BedingteAnweisung | Schleife | ForSchleife | Inkrementierung ) .
+AnweisungsBlock ::= ε | Anweisung | AnweisungsBlock Anweisung
 
-Zuweisung ::= Bezeichner WSO '<=' WSO ( GanzzahlLiteral | GleitkommaLiteral | Zeichenkette | Bezeichner | MathematischerAusdruck | StringAusdruck ) .
+Anweisung ::= Zuweisung | BedingteAnweisung | Schleife | ForSchleife | Inkrementierung
 
-Inkrementierung ::= Bezeichner ( '++' | '--' ) .
+Zuweisung ::= Bezeichner WSO <= WSO GanzzahlLiteral | Bezeichner WSO <= WSO GleitkommaLiteral | Bezeichner WSO <= WSO Zeichenkette 
+            | Bezeichner WSO <= WSO Bezeichner | Bezeichner WSO <= WSO MathematischerAusdruck | Bezeichner WSO <= WSO StringAusdruck 
 
-MathematischerAusdruck ::= Summand { ('+' | '-') Summand } .
-Summand ::= Faktor { ('*' | '/') Faktor } .
-Faktor ::= Operand | Bezeichner | '(' WSO MathematischerAusdruck WSO ')' .
-Operand ::= GanzzahlLiteral | GleitkommaLiteral .
+Inkrementierung ::= Bezeichner ++ | Bezeichner --
 
-StringAusdruck ::= StringAtom { '+' StringAtom } .
-StringAtom ::= Zeichenkette | Bezeichner .
-Zeichenkette ::= '"' { Buchstabe | Grossbuchstabe } '"' .
+MathematischerAusdruck ::= Summand | Summand + MathematischerAusdruck | Summand - MathematischerAusdruck
+Summand ::= Faktor | Faktor * Summand | Faktor / Summand
+Faktor ::= Operand | Bezeichner | ( WSO MathematischerAusdruck WSO )
+Operand ::= GanzzahlLiteral | GleitkommaLiteral 
 
-BoolescherAusdruck ::= Vergleich | '(' WSO BoolescherAusdruck WSO ')' | BoolescherAusdruck ( '&&' | '||' ) BoolescherAusdruck .
-Vergleich ::= ( Bezeichner | GanzzahlLiteral | GleitkommaLiteral | Zeichenkette ) WSO VergleichsOperator WSO ( Bezeichner | GanzzahlLiteral | GleitkommaLiteral | Zeichenkette ) .
-VergleichsOperator ::= '<' | '>' | '==' | '!=' .
+StringAusdruck ::= StringAtom | StringAusdruck + StringAtom
+StringAtom ::= Zeichenkette | Bezeichner 
+Zeichenkette ::= " ε " | " Buchstabe Zeichenkette " | " Grossbuchstabe Zeichenkette "
 
-BedingteAnweisung ::= 'if' '(' BoolescherAusdruck ')' ':' AnweisungsBlock [ 'else' ':' AnweisungsBlock ] 'end' .
+BoolescherAusdruck ::= Vergleich | ( WSO BoolescherAusdruck WSO ) | BoolescherAusdruck && BoolescherAusdruck | BoolescherAusdruck || BoolescherAusdruck
+Vergleich ::= Bezeichner WSO VergleichsOperator WSO Bezeichner | Bezeichner WSO VergleichsOperator WSO GanzzahlLiteral | Bezeichner WSO VergleichsOperator WSO GleitkommaLiteral | Bezeichner WSO VergleichsOperator WSO Zeichenkette
+            | GanzzahlLiteral WSO VergleichsOperator WSO Bezeichner | GanzzahlLiteral WSO VergleichsOperator WSO GanzzahlLiteral | GanzzahlLiteral WSO VergleichsOperator WSO GleitkommaLiteral | GanzzahlLiteral WSO VergleichsOperator WSO Zeichenkette
+            | GleitkommaLiteral WSO VergleichsOperator WSO Bezeichner | GleitkommaLiteral WSO VergleichsOperator WSO GanzzahlLiteral | GleitkommaLiteral WSO VergleichsOperator WSO GleitkommaLiteral | GleitkommaLiteral WSO VergleichsOperator WSO Zeichenkette
+            | Zeichenkette WSO VergleichsOperator WSO Bezeichner | Zeichenkette WSO VergleichsOperator WSO GanzzahlLiteral | Zeichenkette WSO VergleichsOperator WSO GleitkommaLiteral | Zeichenkette WSO VergleichsOperator WSO Zeichenkette
+VergleichsOperator ::= < | > | == | !=
 
-Schleife ::= 'while' '(' BoolescherAusdruck ')' ':' AnweisungsBlock 'end' .
+BedingteAnweisung ::= if ( BoolescherAusdruck ) : AnweisungsBlock end | if ( BoolescherAusdruck ) : AnweisungsBlock else : AnweisungsBlock end
 
-ForSchleife ::= 'for' '(' [ Deklaration ] ';' BoolescherAusdruck ';' [ Zuweisung ] ')' ':' AnweisungsBlock 'end' .
+Schleife ::= while ( BoolescherAusdruck ) : AnweisungsBlock end
 
-GanzzahlLiteral ::= Ziffer { Ziffer } .
-GleitkommaLiteral ::= Ziffer { Ziffer } '.' Ziffer { Ziffer } .
-Ziffer ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' .
+ForSchleife ::= for ( ; BoolescherAusdruck ; ) : AnweisungsBlock end | for ( Deklaration ; BoolescherAusdruck ; ) : AnweisungsBlock end 
+              | for ( Deklaration ; BoolescherAusdruck ; Zuweisung ) : AnweisungsBlock end | for ( ; BoolescherAusdruck ; Zuweisung ) : AnweisungsBlock end
 
-Buchstabe ::= 'a'...'z' .
-Grossbuchstabe ::= 'A'...'Z' .
+Ziffer ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+GanzzahlLiteral ::= Ziffer | Ziffer GanzzahlLiteral
+GleitkommaLiteral ::= GanzzahlLiteral . GanzzahlLiteral
 
-Leerzeichen ::= ' ' { ' ' } .
+Buchstabe ::= a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
+Grossbuchstabe ::= A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+
+Leerzeichen ::= " " | " Leerzeichen"
 WSO ::= [ Leerzeichen ] .   -- optionales Leerzeichen
+WSO ::= .   -- optionales Leerzeichen | Leerzeichen . -- optionales Leerzeichen
 
 }
 
