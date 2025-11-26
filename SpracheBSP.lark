@@ -136,7 +136,7 @@ StringAtom =<
                 = Bezeichner .
 > .
 
-Zeichenkette    ="""ZeichenketteInhalt"""  .
+Zeichenkette    ="\""ZeichenketteInhalt"\""  .
 
 ZeichenketteInhalt =< 
                 = .
