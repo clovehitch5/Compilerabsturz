@@ -1,0 +1,287 @@
+--      G = ( N, Z, T, P )
+
+--      N = {
+--      Z, Programm, Deklarationsteil, Deklaration, Trennlinie, Ausfuehrungsteil,
+--      AnweisungsBlock, Anweisung, Zuweisung, Inkrementierung, BedingteAnweisung,
+--      Schleife, ForSchleife, Typ, BezeichnerDeklaration, Bezeichner, BezeichnerZusatz,
+--      StringAusdruck, StringAtom, Zeichenkette, ZeichenketteInhalt, MathematischerAusdruck,
+--      Summand, Faktor, Operand, GanzzahlLiteral, GleitkommaLiteral,
+--      BoolescherAusdruck, VergleichsOperator, Ziffer, Buchstabe, Grossbuchstabe,
+--      Leerzeichen, WSO
+--      }
+
+--      T = {
+--      ' ', 'A'...'Z', 'a'...'z', '0'...'9',
+--      ',', '.', '<=', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--',
+--      '&&', '||', 'int', 'float', 'string', 'if', 'else', 'while', 'begin', 'end',
+--      'for', '...', 'programm'
+--      }
+--
+
+SCANNER l_scan
+PARSER l_pars
+RULE
+
+Z               = Programm Deklarationsteil Trennlinie Ausfuehrungsteil 
+
+Programm        = "programm" WSO Bezeichner ":" .
+
+Deklarationsteil =< 
+                = .
+                = Deklaration .
+                = Deklarationsteil Deklaration .
+>.
+
+Deklaration =<
+                = Typ WSO BezeichnerDeklaration .
+                = Typ WSO BezeichnerDeklaration WSO "<=" WSO GanzzahlLiteral .
+                = Typ WSO BezeichnerDeklaration WSO "<=" WSO GleitkommaLiteral .
+                = Typ WSO BezeichnerDeklaration WSO "<=" WSO Zeichenkette .
+> .
+
+Typ =< 
+                = "int" .
+                = "float" .
+                = "string" .
+> .
+
+BezeichnerDeklaration =<
+                = Bezeichner .
+                = Bezeichner "<" .
+                = Bezeichner "<" Zeichenkette .
+                = Bezeichner ">" .
+                = Bezeichner "<" ">" .
+                = Bezeichner "<" Zeichenkette ">" .
+> .
+
+Bezeichner =<
+                = Buchstabe BezeichnerZusatz.
+                = Grossbuchstabe BezeichnerZusatz. 
+> .
+
+BezeichnerZusatz =<
+                = .
+                = Buchstabe BezeichnerZusatz .
+                = Grossbuchstabe .
+                = Ziffer .
+                = "_" .
+> .
+
+Trennlinie =< 
+                = "." "." "." . 
+                = Trennlinie "." .
+> .
+
+Ausfuehrungsteil = "begin" WSO AnweisungsBlock "end" . 
+
+AnweisungsBlock =<
+                = ε .
+                = Anweisung . 
+                = AnweisungsBlock Anweisung .
+> .
+
+Anweisung =< 
+                = Zuweisung .
+                = BedingteAnweisung .
+                = Schleife .
+                = ForSchleife .
+                = Inkrementierung .
+> .
+
+Zuweisung =<
+                = Bezeichner WSO "<=" WSO GanzzahlLiteral .
+                = Bezeichner WSO "<=" WSO GleitkommaLiteral . 
+                = Bezeichner WSO "<=" WSO Zeichenkette . 
+                = Bezeichner WSO "<=" WSO Bezeichner .
+                = Bezeichner WSO "<=" WSO MathematischerAusdruck .
+                = Bezeichner WSO "<=" WSO StringAusdruck .
+> .
+
+Inkrementierung =<
+                = Bezeichner "+" "+" .
+                = Bezeichner "-" "-" .
+> .
+
+
+MathematischerAusdruck =<
+                = Summand . 
+                = Summand "+" MathematischerAusdruck .
+                = Summand "-" MathematischerAusdruck .
+> .
+
+Summand =<
+                = Faktor .
+                = Faktor "*" Summand . 
+                = Faktor "/" Summand .
+> .
+
+Faktor =<
+                = Operand .
+                = Bezeichner .
+                = "(" WSO MathematischerAusdruck WSO ")" .
+> .
+
+Operand =<
+                = GanzzahlLiteral .
+                = GleitkommaLiteral . 
+> .
+
+StringAusdruck =<
+                = StringAtom .
+                = StringAusdruck "+" StringAtom .
+> .
+
+StringAtom =<
+                = Zeichenkette .
+                = Bezeichner .
+> .
+
+Zeichenkette    ="""ZeichenketteInhalt"""  .
+
+ZeichenketteInhalt =< 
+                = .
+                = Buchstabe ZeichenketteInhalt .
+                = Grossbuchstabe ZeichenketteInhalt  .
+                = Ziffer ZeichenketteInhalt .
+> .
+
+BoolescherAusdruck =<
+                = Vergleich .
+                = "(" WSO BoolescherAusdruck WSO ")" .
+                = BoolescherAusdruck "&&" BoolescherAusdruck .
+                = BoolescherAusdruck "||" BoolescherAusdruck .
+> .
+
+Vergleich =<
+                = Bezeichner WSO VergleichsOperator WSO Bezeichner .
+                = Bezeichner WSO VergleichsOperator WSO GanzzahlLiteral .
+                = Bezeichner WSO VergleichsOperator WSO GleitkommaLiteral .
+                = Bezeichner WSO VergleichsOperator WSO Zeichenkette .
+                = GanzzahlLiteral WSO VergleichsOperator WSO Bezeichner .
+                = GanzzahlLiteral WSO VergleichsOperator WSO GanzzahlLiteral .
+                = GanzzahlLiteral WSO VergleichsOperator WSO GleitkommaLiteral .
+                = GanzzahlLiteral WSO VergleichsOperator WSO Zeichenkette .
+                = GleitkommaLiteral WSO VergleichsOperator WSO Bezeichner .
+                = GleitkommaLiteral WSO VergleichsOperator WSO GanzzahlLiteral .
+                = GleitkommaLiteral WSO VergleichsOperator WSO GleitkommaLiteral .
+                = GleitkommaLiteral WSO VergleichsOperator WSO Zeichenkette .
+                = Zeichenkette WSO VergleichsOperator WSO Bezeichner .
+                = Zeichenkette WSO VergleichsOperator WSO GanzzahlLiteral .
+                = Zeichenkette WSO VergleichsOperator WSO GleitkommaLiteral .
+                = Zeichenkette WSO VergleichsOperator WSO Zeichenkette
+> .
+
+VergleichsOperator =< 
+                = "<" .
+                = ">" .
+                = "==" .
+                = "!=" .
+> .
+
+BedingteAnweisung =<
+                = "if" "(" BoolescherAusdruck ")" ":" AnweisungsBlock "end" .
+                = "if" "(" BoolescherAusdruck ")" ":" AnweisungsBlock "else" ":" AnweisungsBlock "end" .
+> .
+
+Schleife = "while" "(" BoolescherAusdruck ")" ":" AnweisungsBlock "end" .
+
+ForSchleife =<
+            = "for" "("             ";" BoolescherAusdruck ";"           ")" ":" AnweisungsBlock "end" .
+            = "for" "(" Deklaration ";" BoolescherAusdruck ";"           ")" ":" AnweisungsBlock "end" .
+            = "for" "(" Deklaration ";" BoolescherAusdruck ";" Zuweisung ")" ":" AnweisungsBlock "end" .
+            = "for" "("             ";" BoolescherAusdruck ";" Zuweisung ")" ":" AnweisungsBlock "end" .
+> .
+
+Ziffer =< 
+            = "0" .
+            = "1" .
+            = "2" .
+            = "3" .
+            = "4" .
+            = "5" .
+            = "6" .
+            = "7" .
+            = "8" .
+            = "9" .
+> .
+
+GanzzahlLiteral =<
+            = Ziffer .
+            = Ziffer GanzzahlLiteral .
+> .
+
+GleitkommaLiteral = GanzzahlLiteral "." GanzzahlLiteral .
+
+Buchstabe =>
+                = "a" .
+                = "b" .
+                = "c" .
+                = "d" .
+                = "e" .
+                = "f" .
+                = "g" .
+                = "h" .
+                = "i" .
+                = "j" .
+                = "k" .
+                = "l" .
+                = "m" .
+                = "n" .
+                = "o" .
+                = "p" .
+                = "q" .
+                = "r" .
+                = "s" .
+                = "t" .
+                = "u" .
+                = "v" .
+                = "w" .
+                = "x" .
+                = "y" .
+                = "z" .
+> .
+Grossbuchstabe =<
+                = "A" .
+                = "B" .
+                = "C" .
+                = "D" .
+                = "E" .
+                = "F" .
+                = "G" .
+                = "H" .
+                = "I" .
+                = "J" .
+                = "K" .
+                = "L" .
+                = "M" .
+                = "N" .
+                = "O" .
+                = "P" .
+                = "Q" .
+                = "R" .
+                = "S" .
+                = "T" .
+                = "U" .
+                = "V" .
+                = "W" .
+                = "X" .
+                = "Y" .
+                = "Z" .
+> .
+
+Leerzeichen =<
+            = " " .
+            = " " Leerzeichen .
+> .
+
+WSO =<
+            = .                     -- optionales Leerzeichen .
+            = Leerzeichen .         -- optionales Leerzeichen
+> .
+
+
+
+
+
+GanzzahlLiteral:[Value: long] {Value:= 0;}.
+Bezeichner:     [Name: tIdent] {Name := NoIdent;}.

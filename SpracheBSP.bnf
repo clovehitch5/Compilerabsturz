@@ -4,7 +4,7 @@ N = {
   Z, Programm, Deklarationsteil, Deklaration, Trennlinie, Ausfuehrungsteil,
   AnweisungsBlock, Anweisung, Zuweisung, Inkrementierung, BedingteAnweisung,
   Schleife, ForSchleife, Typ, BezeichnerDeklaration, Bezeichner,
-  StringAusdruck, StringAtom, Zeichenkette, MathematischerAusdruck,
+  StringAusdruck, StringAtom, Zeichenkette, ZeichenketteInhalt, MathematischerAusdruck,
   Summand, Faktor, Operand, GanzzahlLiteral, GleitkommaLiteral,
   BoolescherAusdruck, VergleichsOperator, Ziffer, Buchstabe, Grossbuchstabe,
   Leerzeichen, WSO
@@ -58,7 +58,8 @@ Operand ::= GanzzahlLiteral | GleitkommaLiteral
 
 StringAusdruck ::= StringAtom | StringAusdruck + StringAtom
 StringAtom ::= Zeichenkette | Bezeichner 
-Zeichenkette ::= " ε " | " Buchstabe Zeichenkette " | " Grossbuchstabe Zeichenkette "
+Zeichenkette ::= " ZeichenketteInhalt " 
+ZeichenketteInhalt ::=Buchstabe Zeichenkette | Grossbuchstabe Zeichenkette 
 
 BoolescherAusdruck ::= Vergleich | ( WSO BoolescherAusdruck WSO ) | BoolescherAusdruck && BoolescherAusdruck | BoolescherAusdruck || BoolescherAusdruck
 Vergleich ::= Bezeichner WSO VergleichsOperator WSO Bezeichner | Bezeichner WSO VergleichsOperator WSO GanzzahlLiteral | Bezeichner WSO VergleichsOperator WSO GleitkommaLiteral | Bezeichner WSO VergleichsOperator WSO Zeichenkette
