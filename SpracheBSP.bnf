@@ -1,97 +1,121 @@
 G = ( N, Z, T, P )
 
 N = {
-  Z, Programm, Deklarationsteil, Deklaration, Trennlinie, Ausfuehrungsteil,
-  AnweisungsBlock, Anweisung, Zuweisung, Inkrementierung, BedingteAnweisung,
-  Schleife, ForSchleife, Typ, BezeichnerDeklaration, Bezeichner,
-  StringAusdruck, StringAtom, Zeichenkette, ZeichenketteInhalt, MathematischerAusdruck,
-  Summand, Faktor, Operand, GanzzahlLiteral, GleitkommaLiteral,
-  BoolescherAusdruck, VergleichsOperator, Ziffer, Buchstabe, Grossbuchstabe,
-  Leerzeichen, WSO
+  Z, Programm, Deklarationsteil, Deklaration, BezeichnerDeklaration,
+  Ausfuehrungsteil, AnweisungsBlock, Anweisung, Zuweisung, Inkrementierung,
+  BedingteAnweisung, Schleife, ForSchleife, MathematischerAusdruck,
+  Summand, Faktor, Operand, BoolescherAusdruck, BoolAnd, Vergleich,
+  VergleichsOperator, identifier, int_const, float_const, string_const, Trennlinie, type
 }
 
 T = {
-  ' ', 'A'...'Z', 'a'...'z', '0'...'9',
-  ',', '.', '<=', '"', ':', '+', '-', '*', '/', '(', ')', '<', '>', '++', '--',
-  '&&', '||', 'int', 'float', 'string', 'if', 'else', 'while', 'begin', 'end',
-  'for', '...', 'program'
+  'program', 'begin', 'end', 'if', 'else', 'while', 'for',
+  ':', ';', '<=', '++', '--', '+', '-', '*', '/', '(', ')', '<', '>',
+  '==', '!=', '&&', '||', ' ', 'A'...'Z', 'a'...'z', '0' , '1' , '2' , '3' , '4' , '5' , '6' , '7' , '8' , '9'
 }
 
 P = {
+  Z ::= Programm Deklarationsteil Trennlinie Ausfuehrungsteil
 
-Z ::= Programm Deklarationsteil Trennlinie Ausfuehrungsteil 
+  Programm ::= 'program' identifier ':'
 
-Programm ::= program WSO Bezeichner : 
+  Deklarationsteil ::= ε | Deklarationsteil Deklaration
 
-Deklarationsteil ::= ε | Deklaration | Deklarationsteil Deklaration
+  Deklaration ::= type BezeichnerDeklaration
+                | type BezeichnerDeklaration '<=' int_const
+                | type BezeichnerDeklaration '<=' float_const
+                | type BezeichnerDeklaration '<=' string_const
 
-Deklaration ::= Typ WSO BezeichnerDeklaration | Typ WSO BezeichnerDeklaration WSO <= WSO GanzzahlLiteral 
-                                              | Typ WSO BezeichnerDeklaration WSO <= WSO GleitkommaLiteral
-                                              | Typ WSO BezeichnerDeklaration WSO <= WSO Zeichenkette
+  BezeichnerDeklaration ::= identifier
+                          | identifier '<'
+                          | identifier '<' string_const
+                          | identifier '>'
+                          | identifier '<' '>'
+                          | identifier '<' string_const '>'
 
-Typ ::= int | float | string 
+  Ausfuehrungsteil ::= 'begin' AnweisungsBlock 'end'
 
-BezeichnerDeklaration ::= Bezeichner | Bezeichner < | Bezeichner < Zeichenkette | Bezeichner > | Bezeichner <> | Bezeichner < Zeichenkette >
+  AnweisungsBlock ::= ε | AnweisungsBlock Anweisung
 
-Bezeichner ::= ( Buchstabe | Grossbuchstabe ) { Buchstabe | Grossbuchstabe | Ziffer } 
-Bezeichner ::= Buchstabe | Buchstabe Buchstabe | Buchstabe Grossbuchstabe | Buchstabe Ziffer | Buchstabe
-             | Grossbuchstabe| Grossbuchstabe Buchstabe | Grossbuchstabe Grossbuchstabe | Grossbuchstabe Ziffer
+  Anweisung ::= Zuweisung
+              | BedingteAnweisung
+              | Schleife
+              | ForSchleife
+              | Inkrementierung
 
+  Zuweisung ::= identifier '<=' MathematischerAusdruck
 
-Trennlinie ::= ... | Trennlinie .
+  Inkrementierung ::= identifier '++' | identifier '--'
 
-Ausfuehrungsteil ::= begin WSO AnweisungsBlock end 
+  MathematischerAusdruck ::= Summand
+                           | Summand '+' MathematischerAusdruck
+                           | Summand '-' MathematischerAusdruck
 
-AnweisungsBlock ::= ε | Anweisung | AnweisungsBlock Anweisung
+  Summand ::= Faktor
+            | Faktor '*' Summand
+            | Faktor '/' Summand
 
-Anweisung ::= Zuweisung | BedingteAnweisung | Schleife | ForSchleife | Inkrementierung
+  Faktor ::= Operand
+           | '(' MathematischerAusdruck ')'
 
-Zuweisung ::= Bezeichner WSO <= WSO GanzzahlLiteral | Bezeichner WSO <= WSO GleitkommaLiteral | Bezeichner WSO <= WSO Zeichenkette 
-            | Bezeichner WSO <= WSO Bezeichner | Bezeichner WSO <= WSO MathematischerAusdruck | Bezeichner WSO <= WSO StringAusdruck 
+  Operand ::= identifier
+            | int_const
+            | float_const
+            | string_const
 
-Inkrementierung ::= Bezeichner ++ | Bezeichner --
+  BoolescherAusdruck ::= BoolAnd
+                       | BoolAnd '||' BoolescherAusdruck
 
-MathematischerAusdruck ::= Summand | Summand + MathematischerAusdruck | Summand - MathematischerAusdruck
-Summand ::= Faktor | Faktor * Summand | Faktor / Summand
-Faktor ::= Operand | Bezeichner | ( WSO MathematischerAusdruck WSO )
-Operand ::= GanzzahlLiteral | GleitkommaLiteral 
+  BoolAnd ::= Vergleich
+            | Vergleich '&&' BoolAnd
 
-StringAusdruck ::= StringAtom | StringAusdruck + StringAtom
-StringAtom ::= Zeichenkette | Bezeichner 
-Zeichenkette ::= " ZeichenketteInhalt " 
-ZeichenketteInhalt ::=Buchstabe Zeichenkette | Grossbuchstabe Zeichenkette 
+  Vergleich ::= identifier VergleichsOperator identifier
+              | identifier VergleichsOperator int_const
+              | identifier VergleichsOperator float_const
+              | identifier VergleichsOperator string_const
+              | int_const VergleichsOperator identifier
+              | int_const VergleichsOperator int_const
+              | int_const VergleichsOperator float_const
+              | int_const VergleichsOperator string_const
+              | float_const VergleichsOperator identifier
+              | float_const VergleichsOperator int_const
+              | float_const VergleichsOperator float_const
+              | float_const VergleichsOperator string_const
+              | string_const VergleichsOperator identifier
+              | string_const VergleichsOperator int_const
+              | string_const VergleichsOperator float_const
+              | string_const VergleichsOperator string_const
+              | '(' Vergleich ')'
 
-BoolescherAusdruck ::= Vergleich | ( WSO BoolescherAusdruck WSO ) | BoolescherAusdruck && BoolescherAusdruck | BoolescherAusdruck || BoolescherAusdruck
-Vergleich ::= Bezeichner WSO VergleichsOperator WSO Bezeichner | Bezeichner WSO VergleichsOperator WSO GanzzahlLiteral | Bezeichner WSO VergleichsOperator WSO GleitkommaLiteral | Bezeichner WSO VergleichsOperator WSO Zeichenkette
-            | GanzzahlLiteral WSO VergleichsOperator WSO Bezeichner | GanzzahlLiteral WSO VergleichsOperator WSO GanzzahlLiteral | GanzzahlLiteral WSO VergleichsOperator WSO GleitkommaLiteral | GanzzahlLiteral WSO VergleichsOperator WSO Zeichenkette
-            | GleitkommaLiteral WSO VergleichsOperator WSO Bezeichner | GleitkommaLiteral WSO VergleichsOperator WSO GanzzahlLiteral | GleitkommaLiteral WSO VergleichsOperator WSO GleitkommaLiteral | GleitkommaLiteral WSO VergleichsOperator WSO Zeichenkette
-            | Zeichenkette WSO VergleichsOperator WSO Bezeichner | Zeichenkette WSO VergleichsOperator WSO GanzzahlLiteral | Zeichenkette WSO VergleichsOperator WSO GleitkommaLiteral | Zeichenkette WSO VergleichsOperator WSO Zeichenkette
-VergleichsOperator ::= < | > | == | !=
+  VergleichsOperator ::= '<' | '>' | '==' | '!='
 
-BedingteAnweisung ::= if ( BoolescherAusdruck ) : AnweisungsBlock end | if ( BoolescherAusdruck ) : AnweisungsBlock else : AnweisungsBlock end
+  BedingteAnweisung ::= 'if' '(' BoolescherAusdruck ')' ':' AnweisungsBlock 'end'
+                      | 'if' '(' BoolescherAusdruck ')' ':' AnweisungsBlock 'else' ':' AnweisungsBlock 'end'
 
-Schleife ::= while ( BoolescherAusdruck ) : AnweisungsBlock end
+  Schleife ::= 'while' '(' BoolescherAusdruck ')' ':' AnweisungsBlock 'end'
 
-ForSchleife ::= for ( ; BoolescherAusdruck ; ) : AnweisungsBlock end | for ( Deklaration ; BoolescherAusdruck ; ) : AnweisungsBlock end 
-              | for ( Deklaration ; BoolescherAusdruck ; Zuweisung ) : AnweisungsBlock end | for ( ; BoolescherAusdruck ; Zuweisung ) : AnweisungsBlock end
-
-Ziffer ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-GanzzahlLiteral ::= Ziffer | Ziffer GanzzahlLiteral
-GleitkommaLiteral ::= GanzzahlLiteral . GanzzahlLiteral
-
-Buchstabe ::= a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
-Grossbuchstabe ::= A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
-
-Leerzeichen ::= " " | " Leerzeichen"
-WSO ::= [ Leerzeichen ] .   -- optionales Leerzeichen
-WSO ::= .   -- optionales Leerzeichen | Leerzeichen . -- optionales Leerzeichen
-
+  ForSchleife ::= 'for' '(' ';' BoolescherAusdruck ';' ')' ':' AnweisungsBlock 'end'
+                | 'for' '(' Deklaration ';' BoolescherAusdruck ';' ')' ':' AnweisungsBlock 'end'
+                | 'for' '(' Deklaration ';' BoolescherAusdruck ';' Anweisung ')' ':' AnweisungsBlock 'end'
+                | 'for' '(' ';' BoolescherAusdruck ';' Anweisung ')' ':' AnweisungsBlock 'end'
+  
+  type ::= 'int'|'float'|'string'
+  int_const ::= digit | digit int_const
+  float_const ::= int_const '.' int_const
+  string_const ::= '"' string_characters '"'
+  string_characters ::= ε | string_character string_characters
+  string_character ::= letter | digit | ' ' | '_' | '+' | '-' | '*' | '/' | '<' | '>' | '=' | '!' | ':' | ';'
+  identifier ::= letter | identifier letter | identifier digit
+  digit ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+  letter ::= 'a'...'z' | 'A'...'Z'
 }
-
 #### Semantik:
 
 - Variablen müssen deklariert werden, bevor sie verwendet werden.
 - Typen sind strikt: keine automatische Konvertierung zwischen Zahlen und Strings.
 - `<` und `>` bei Deklarationen kennzeichnen Eingabe bzw. Ausgabe.
-- In Schleifen und if/else-Blöcken dürfen mehrere Anweisungen stehen.
-- Leerzeichen sind nur erlaubt, wo explizit durch `WSO` vorgesehen.
+- In Schleifen und `wenn`/`dann`-Blöcken dürfen mehrere Anweisungen stehen.
+- Leerzeichen werden vollständig durch den Scanner (wie in `SpracheBSP.lark` beschrieben) behandelt.
+
+#### 
+- String ist auch in MathematischerAusdruck erlaubt, da es implizit über identifier sowieso geht. Die Stringkonkaternation ist damit abgedeckt und muss nicht extra definiert werden (vermeidet reduce-reduce-Konflikt). Für eine Überprüfung zu welchem Typ der identifier gehört ist eine Kontext nötig, den man bei der syntaktischen Analyse nicht hat. Folglich muss das Problem zu einem späterem Zeitpunkt gelöst werden. Eine vorgegeben Schreibweise für string-Variablen wäre auch eine Lösung, aber wird als unschön und unnötig komliziert für den Neutzer erachtet.
