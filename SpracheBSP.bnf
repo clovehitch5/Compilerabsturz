@@ -48,12 +48,12 @@ P = {
   Inkrementierung ::= identifier '++' | identifier '--'
 
   MathematischerAusdruck ::= Summand
-                           | Summand '+' MathematischerAusdruck
-                           | Summand '-' MathematischerAusdruck
+                           | MathematischerAusdruck '+' Summand 
+                           | MathematischerAusdruck '-' Summand
 
   Summand ::= Faktor
-            | Faktor '*' Summand
-            | Faktor '/' Summand
+            |  Summand '*' Faktor
+            |  Summand '/' Faktor
 
   Faktor ::= Operand
            | '(' MathematischerAusdruck ')'
@@ -64,10 +64,10 @@ P = {
             | string_const
 
   BoolescherAusdruck ::= BoolAnd
-                       | BoolAnd '||' BoolescherAusdruck
+                       | BoolescherAusdruck '||' BoolAnd
 
   BoolAnd ::= Vergleich
-            | Vergleich '&&' BoolAnd
+            | BoolAnd '&&' Vergleich 
 
   Vergleich ::= identifier VergleichsOperator identifier
               | identifier VergleichsOperator int_const
